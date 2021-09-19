@@ -9,6 +9,7 @@ public class DungeonCrawlerGame{
         System.out.print("Difficulty: How big do you want the dungeon to be (3x4 for Easy, 4x5 for Medium, 5X6 for hard)\nEnter length and width: ");
         int length = scan.nextInt();
         int width = scan.nextInt();
+        
         System.out.print("Character creator: Type a symbol to represent you: ");
         String playerX = scan.next();
 

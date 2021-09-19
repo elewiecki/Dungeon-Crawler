@@ -3,6 +3,7 @@ import java.util.Random;
 public class Dungeon {
 
 char[][] dungeon;
+int[][] dungeonMemory; //0 is undiscovered, 1 is cleared, 2 is enemy you ran away from
 char playerX;
 int curX, curY;
 Random rand;
@@ -10,7 +11,6 @@ Character player;
 Character enemy;
 int length, width;
 int enemiesKilled;
-int[][] dungeonMemory; //0 is undiscovered, 1 is cleared, 2 is enemy you ran away from
 
     public Dungeon(int length, int width, String playerX){
         dungeon = new char[length][width];
