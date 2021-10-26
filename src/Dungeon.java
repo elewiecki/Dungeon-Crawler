@@ -7,8 +7,8 @@ int[][] dungeonMemory; //0 is undiscovered, 1 is cleared, 2 is enemy you ran awa
 char playerX;
 int curX, curY;
 Random rand;
-Character player;
-Character enemy;
+Player player;
+Enemy enemy;
 int length, width;
 int enemiesKilled;
 
@@ -19,10 +19,11 @@ int enemiesKilled;
         rand = new Random();
         curX = rand.nextInt(length);
         curY = 0;
-        player = new Character(true, enemiesKilled);
+        player = new Player(10, 3);
         enemiesKilled = 0;
     }
 
+    //initializes empty dungeon
     public void createDungeon(){
         for(int i = 0; i < dungeon.length; ++i){
             for(int j = 0; j < dungeon[i].length; ++j){
@@ -34,6 +35,7 @@ int enemiesKilled;
         dungeonMemory[curX][curY] = 1;
     }
 
+    //prints current state of dungeon
     public void printDungeon(){
         for(int i = 0; i < dungeon.length; ++i){
             for(int j = 0; j < dungeon[i].length; ++j){
@@ -49,6 +51,7 @@ int enemiesKilled;
         System.out.print("\n");
     }
 
+    //player moves in direction specified, returns boolean if you moved or not
     public boolean move(String direction, boolean isRunning){
         if(!isRunning) dungeon[curX][curY] = '*';
         else dungeon[curX][curY] = '_';
@@ -73,6 +76,7 @@ int enemiesKilled;
         return moved;
     }
 
+    //determines what happens on a square, returns int representing player state after encounter
     public int encounter(){
         int randNum = rand.nextInt(100);
         if(dungeonMemory[curX][curY] == 1){
@@ -93,13 +97,14 @@ int enemiesKilled;
         else if(dungeonMemory[curX][curY] == 2 || randNum >= 50 && randNum < 100){
             System.out.println("There's an enemy!\n");
             printStats();
-            enemy = new Character(false, enemiesKilled);
+            enemy = new Enemy(rand.nextInt(2) + 4 + enemiesKilled, enemiesKilled / 2);
             dungeonMemory[curX][curY] = 2;
             return 1;
         }
         return 2;
     }
 
+    //player is in a fight, return int representing player state after fight
     public int fight(String action){
         int playerDamage = player.dealDamage();
         enemy.setHealth(-playerDamage);
@@ -119,6 +124,7 @@ int enemiesKilled;
         return 1;
     }
 
+    //passes upgrade choice onto player
     public void upgradePlayer(String upgradeChoice) {
         String upgrade = "";
         switch(upgradeChoice){
@@ -136,6 +142,7 @@ int enemiesKilled;
         System.out.println(upgrade + "\n");
     }
 
+    //gives player a health potion and prints relevant UI
     public boolean useHealthPotion(){
         int numPotions = player.getNumPotions();
         System.out.print("You had " + numPotions + " potions");
@@ -150,6 +157,7 @@ int enemiesKilled;
         }
     }
 
+    //checks if all tiles were cleared
     public boolean winCheck(){
         for(int i = 0; i < dungeon.length; ++i){
             for(int j = 0; j < dungeon[i].length; ++j){
@@ -159,6 +167,7 @@ int enemiesKilled;
         return true;
     }
 
+    //prints players current stats
     public void printStats(){
         System.out.println("Your health: " + player.getHealthOverMaxHealth());
         System.out.println("Your damage output: " + player.getBaseDamage() + " + (0 to 3) ");
