@@ -78,26 +78,26 @@ int enemiesKilled;
 
     //determines what happens on a square, returns int representing player state after encounter
     public int encounter(){
-        int randNum = rand.nextInt(100);
         if(dungeonMemory[curX][curY] == 1){
             System.out.println("You've already been here, nothing happens\n");
             return 2;
         }
-        if(dungeonMemory[curX][curY] == 0 && randNum < 30){
+        int randNum = rand.nextInt(100);
+        if(dungeonMemory[curX][curY] == 0 && randNum < 25){ //25% chance of nothing
             System.out.println("Nothing happens\n");
             dungeonMemory[curX][curY] = 1;
             return 2;
         }
-        else if(dungeonMemory[curX][curY] == 0 && randNum >= 30 && randNum < 50){
+        else if(dungeonMemory[curX][curY] == 0 && randNum >= 25 && randNum < 50){ //25% chance of health potion
             System.out.println("You get a health potion! Now you have " + (player.getNumPotions() + 1) + " potions\n");
             player.gainPotion();
             dungeonMemory[curX][curY] = 1;
             return 2;
         }
-        else if(dungeonMemory[curX][curY] == 2 || randNum >= 50 && randNum < 100){
+        else if(dungeonMemory[curX][curY] == 2 || randNum >= 50 && randNum < 100){ //50% chance of enemy spawning
             System.out.println("There's an enemy!\n");
             printStats();
-            enemy = new Enemy(rand.nextInt(2) + 4 + enemiesKilled, enemiesKilled / 2);
+            enemy = new Enemy(rand.nextInt(3) + 4 + enemiesKilled, enemiesKilled / 2); //spawn enemy
             dungeonMemory[curX][curY] = 2;
             return 1;
         }
@@ -105,7 +105,7 @@ int enemiesKilled;
     }
 
     //player is in a fight, return int representing player state after fight
-    public int fight(String action){
+    public int fight(){
         int playerDamage = player.dealDamage();
         enemy.setHealth(-playerDamage);
         System.out.println("You dealt " + playerDamage + " damage!");

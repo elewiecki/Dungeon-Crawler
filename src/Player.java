@@ -14,7 +14,7 @@ public class Player extends Entity{
              health += 3;
         }
         if(up == 2){
-            baseDamage += 3;
+            baseDamage += 2;
         }
     }
 

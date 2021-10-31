@@ -6,13 +6,16 @@ public class DungeonCrawlerGame{
 
         Scanner scan = new Scanner(System.in);
 
+        //Dungeon size selection
         System.out.print("Difficulty: How big do you want the dungeon to be (3x4 for Easy, 4x5 for Medium, 5X6 for hard)\nEnter length and width: ");
         int length = scan.nextInt();
         int width = scan.nextInt();
         
+        //character selection
         System.out.print("Character creator: Type a symbol to represent you: ");
         String playerX = scan.next();
 
+        //game instructions
         System.out.println("\nTiles will either have an enemy to fight, give you a health potion, or be empty.");
         System.out.println("Cleared tiles are marked by a *");
         System.out.println("You cannot use a health potion in combat.");
@@ -20,17 +23,19 @@ public class DungeonCrawlerGame{
         System.out.println("Type the commands instructed to perform an action. Type \"end\" while not in combat to end the game");
         System.out.println("The goal of the game is to clear every tile. Clear a tile by walking over and killing any enemy on it\n");
 
+        //initializes dungeon
         Dungeon dungeon = new Dungeon(length, width, playerX);
-        Random rand = new Random();
         dungeon.createDungeon();
         dungeon.printDungeon();
 
+        Random rand = new Random();
+
         boolean keepGoing = true;
-        String direction;
-        String action;
         boolean hasMoved = false;
         boolean ran = false;
 
+        String direction;
+        String action;
         String upgrade;
 
         int killsToUpgrade = 2;
@@ -40,6 +45,7 @@ public class DungeonCrawlerGame{
         //begin game loop
         while(keepGoing){
             dungeon.printStats();
+
             //get action input from player
             System.out.print("Type \"up\", \"down\", \"left\", or \"right\", or \"potion\": ");
             direction = scan.next();
@@ -55,16 +61,19 @@ public class DungeonCrawlerGame{
                 dungeon.printDungeon();
                 playerState = dungeon.encounter();
             }
+
             //in fight
             while(playerState == 1){
                 ran = false;
                 System.out.print("Type to \"attack\", or \"run\" to run away: ");
                 action = scan.next();
                 System.out.print("\n");
+
                 if(action.toLowerCase().compareTo("attack") == 0){
-                    playerState = dungeon.fight(action);
+                    playerState = dungeon.fight();
                 }
-                else if(action.toLowerCase().compareTo("run") == 0){
+
+                else if(action.toLowerCase().compareTo("run") == 0){//player ran away
                     System.out.println("You ran away, moving to a random adjacent tile\n");
                     int randNum;
                     hasMoved = false;
@@ -87,8 +96,8 @@ public class DungeonCrawlerGame{
                     dungeon.printDungeon();
                     ran = true;
                     playerState = dungeon.encounter();
-                //if you win a fight
-                }
+                }//end running protocol
+
                 if(playerState == 2 && !ran){
                     dungeon.printDungeon();
                     killsToUpgrade -= 1;
@@ -101,8 +110,10 @@ public class DungeonCrawlerGame{
                         killsToUpgrade = 2;
                     }
                     else System.out.println("Kill one more enemy to get an upgrade\n");
-                }
-            }
+                }//end upgrade selection
+
+            }//end fight loop
+
             //check if game should end
             if(playerState == 3){
                 System.out.print("You're dead! You lose the game!");
@@ -112,6 +123,7 @@ public class DungeonCrawlerGame{
                 System.out.print("You cleared the map! You win!");
                 keepGoing = false;
             }
-        }
-    }
-}
+
+        }//end game loop
+    }//end main
+}//end class

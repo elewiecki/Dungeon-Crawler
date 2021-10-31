@@ -27,7 +27,7 @@ public class Entity {
         return health <= 0;
     }
 
-    //needs to be overriden for differnt entities
+    //needs to be overriden for different entities
     public int dealDamage(){
         return 0;
     }
